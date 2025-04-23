@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SkyCruze</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showSuccessMessage() {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Your comment has been submitted successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                background: '#f8fafc',
+                color: '#2563eb',
+                iconColor: '#16a34a',
+                confirmButtonColor: '#2563eb'
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-2xl font-bold">SkyCruze</a>
+            <ul class="flex space-x-6 text-lg">
+                <li><a href="/signup" class="text-white hover:text-gray-300">Sign Up</a></li>
+                <li><a href="/login" class="text-white hover:text-gray-300">Login</a></li>
+                <li><a href="/contact" class="text-white hover:text-gray-300">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contact Us Section -->
+    <div class="container mx-auto p-8 mt-8">
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">Contact Us</h1>
+
+        <!-- Your Information -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-12">
+            <h2 class="text-3xl font-semibold text-blue-600 mb-4">Contact Information</h2>
+            <p class="text-lg text-gray-800 mb-2"><strong>Name:</strong> Shayan Rasool</p>
+            <p class="text-lg text-gray-800 mb-2"><strong>Contact Number:</strong> +92 303 5482512</p>
+            <p class="text-lg text-gray-800 mb-2"><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/shayan-rasool-25815a28a/" class="text-blue-500 hover:text-blue-700" target="_blank">linkedin.com/in/shayanrasool</a></p>
+            <p class="text-lg text-gray-800 mb-2"><strong>Instagram:</strong> <a href="https://www.instagram.com/shayanrasool" class="text-blue-500 hover:text-blue-700" target="_blank">instagram.com/shayanrasool</a></p>
+        </div>
+
+        <!-- Other Person's Information (Example) -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-blue-600 mb-4">Other Contact</h2>
+            <p class="text-lg text-gray-800 mb-2"><strong>Name:</strong> Muhammad Shah</p>
+            <p class="text-lg text-gray-800 mb-2"><strong>Contact Number:</strong> +92 300 7654321</p>
+            <p class="text-lg text-gray-800 mb-2"><strong>Instagram:</strong> <a href="https://www.instagram.com/johndoe" class="text-blue-500 hover:text-blue-700" target="_blank">instagram.com/johndoe</a></p>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="mt-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-blue-600 mb-4">Leave a Comment</h2>
+            <form onsubmit="showSuccessMessage(); return false;">
+                <textarea class="w-full p-4 mb-4 border border-gray-300 rounded-lg" rows="5" placeholder="Write your suggestion or comment here..."></textarea>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Submit Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center py-4 mt-16">
+        <p>&copy; 2024 SkyCruze. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

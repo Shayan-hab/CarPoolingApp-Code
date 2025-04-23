@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Pooling System</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://source.unsplash.com/1920x1080/?carpooling,travel') no-repeat center center/cover;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1e40af;
+        }
+        footer {
+            margin-top: auto; /* Ensure footer sticks to the bottom */
+        }
+        .dropdown-menu {
+            display: none;
+            z-index: 10;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            color: black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            width: 300px;
+        }
+        .dropdown-menu p, .dropdown-menu a {
+            white-space: normal; /* Ensure full content displays */
+            overflow: hidden;
+        }
+        .dropdown:hover .dropdown-menu, .dropdown.active .dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-white text-2xl font-bold">SkyCruze</a>
+            <ul class="flex space-x-6 text-lg items-center relative">
+                <!-- Profile Dropdown -->
+                <li class="relative dropdown">
+                    <button 
+                        id="profileDropdown" 
+                        class="text-white hover:text-gray-300 focus:outline-none">
+                        My Profile
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="px-4 py-2 border-b">
+                            <p>Welcome, <strong>{{ session.get('name', 'N/A') }}</strong></p>
+                        </div>
+                        <div class="px-4 py-2 border-b">
+                            <p>Email: <span>{{ session.get('email', 'N/A') }}</span></p>
+                        </div>
+                        <a href="/logout" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    
+   <!-- Hero Section -->
+<header class="hero-bg text-white py-24 relative overflow-hidden">
+    <div class="container mx-auto text-center relative z-10">
+        <h1 class="text-6xl font-extrabold mb-6">Your Ride</h1>
+        <p class="text-lg mb-8">Connecting drivers and passengers for smarter, cost-effective travel solutions.</p>
+    </div>
+
+    <!-- Image Carousel -->
+    <div class="absolute inset-0">
+        <div id="hero-carousel" class="relative w-full h-full">
+            <img src="/static/images/1.jpg" alt="Hero Image 1" class="hero-img absolute w-full h-full object-cover opacity-100 transition-opacity duration-1000">
+            <img src="/static/images/2.jpg" alt="Hero Image 2" class="hero-img absolute w-full h-full object-cover opacity-0 transition-opacity duration-1000">
+            <img src="/static/images/3.jpg" alt="Hero Image 3" class="hero-img absolute w-full h-full object-cover opacity-0 transition-opacity duration-1000">
+        </div>
+    </div>
+</header>
+
+<!-- JavaScript for image slider -->
+<script>
+    let currentImageIndex = 0;
+    const images = document.querySelectorAll('.hero-img');
+    const totalImages = images.length;
+
+    function changeImage() {
+        // Remove the opacity from the current image
+        images[currentImageIndex].classList.remove('opacity-100');
+        images[currentImageIndex].classList.add('opacity-0');
+        
+        // Move to the next image index
+        currentImageIndex = (currentImageIndex + 1) % totalImages;
+
+        // Add the opacity back to the next image
+        images[currentImageIndex].classList.remove('opacity-0');
+        images[currentImageIndex].classList.add('opacity-100');
+    }
+
+    setInterval(changeImage, 3000); // Change image every 3 seconds
+</script>
+
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-16">
+        <section class="text-center mb-8">
+            <h2 class="section-title mb-4">Why Choose Us?</h2>
+            <p class="text-gray-700 max-w-2xl mx-auto">
+                Discover the easiest way to carpool! Whether you're a driver looking to share your ride or a passenger seeking cost-effective travel, our platform is tailored to connect people and reduce costs. Enjoy safe, efficient, and community-driven transportation solutions.
+            </p>
+            <a href="/driver-dashboard" class="btn-primary px-8 py-4 rounded-lg text-lg mt-6 inline-block">Continue</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center py-6">
+        <p class="text-sm">&copy; 2024 Car Pooling System. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Dropdown -->
+    <script>
+        const dropdownButton = document.getElementById('profileDropdown');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        let isDropdownOpen = false;
+
+        dropdownButton.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents closing immediately
+            isDropdownOpen = !isDropdownOpen;
+            if (isDropdownOpen) {
+                dropdownButton.parentElement.classList.add('active');
+            } else {
+                dropdownButton.parentElement.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('click', () => {
+            dropdownButton.parentElement.classList.remove('active');
+            isDropdownOpen = false;
+        });
+    </script>
+
+</body>
+</html>

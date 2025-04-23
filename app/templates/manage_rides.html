@@ -1,0 +1,32 @@
+<div class="container mx-auto">
+    <h2 class="text-2xl font-bold mb-6 text-center">Your Posted Rides</h2>
+    <table class="table-auto w-full bg-white rounded-lg shadow">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="px-4 py-2">Origin</th>
+                <th class="px-4 py-2">Destination</th>
+                <th class="px-4 py-2">Date</th>
+                <th class="px-4 py-2">Time</th>
+                <th class="px-4 py-2">Price</th>
+                <th class="px-4 py-2">Seats</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ride in rides %}
+            <tr class="border-b">
+                <td class="px-4 py-2">{{ ride.origin }}</td>
+                <td class="px-4 py-2">{{ ride.destination }}</td>
+                <td class="px-4 py-2">{{ ride.departure_date }}</td>
+                <td class="px-4 py-2">{{ ride.departure_time }}</td>
+                <td class="px-4 py-2">${{ ride.price_per_seat }}</td>
+                <td class="px-4 py-2">{{ ride.seats_available }}</td>
+                <td class="px-4 py-2">
+                    <a href="/edit-ride?ride_id={{ ride.ride_id }}" class="text-blue-600 hover:underline">Edit</a> |
+                    <a href="/delete-ride?ride_id={{ ride.ride_id }}" class="text-red-600 hover:underline">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

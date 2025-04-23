@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger - Car Pooling System</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white">
+        <div class="container mx-auto flex justify-between">
+            <h1 class="text-2xl font-bold">Passenger Dashboard</h1>
+            <a href="/logout" class="hover:text-gray-300">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Search Bar Section -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">Find Your Ride</h2>
+        <form method="POST" action="/search-rides" class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="origin" class="block text-sm font-medium text-gray-700">Origin</label>
+                    <input type="text" id="origin" name="origin" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300" required>
+                </div>
+                <div>
+                    <label for="destination" class="block text-sm font-medium text-gray-700">Destination</label>
+                    <input type="text" id="destination" name="destination" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300" required>
+                </div>
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700">Departure Date</label>
+                    <input type="date" id="date" name="date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300">
+                </div>
+                <div>
+                    <label for="time" class="block text-sm font-medium text-gray-700">Departure Time</label>
+                    <input type="time" id="time" name="time" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300">
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button type="submit" class="btn-primary px-6 py-3 rounded-lg text-lg">Search Rides</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Ride Listings Section -->
+    <!-- Available Rides Section -->
+    <section class="container mx-auto py-12">
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">Available Rides</h2>
+        <div id="ride-listings" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if rides %}
+                {% for ride in rides %}
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Ride Details</h3>
+                    <p><strong>Origin:</strong> {{ ride.origin }}</p>
+                    <p><strong>Destination:</strong> {{ ride.destination }}</p>
+                    <p><strong>Departure:</strong> {{ ride.departure_time }} on {{ ride.departure_date }}</p>
+                    <p><strong>Price:</strong> PKR-{{ ride.price }} per seat</p>
+                    <p><strong>Driver:</strong> {{ ride.driver }}</p>
+                    <p><strong>Seats Available:</strong> {{ ride.seats_available }}</p>
+                    
+                    <!-- Booking Form -->
+                    <div class="mt-4 text-center">
+                        <form method="POST" action="{{ url_for('main.book_ride', ride_id=ride.id) }}">
+                            <label for="seats_requested" class="block text-sm font-medium text-gray-700">Seats Requested:</label>
+                            <input type="number" name="seats_requested" min="1" max="{{ ride.seats_available }}" required class="border border-gray-300 rounded p-2 mt-2 w-20 text-center">
+                            <button type="submit" class="btn-primary px-4 py-2 rounded mt-4 bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">Book Ride</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-lg text-gray-600">No available rides at the moment.</p>
+            {% endif %}
+        </div>
+    </section>
+
+
+
+    <!-- Booked Rides Section -->
+<!-- Booked Rides Section -->
+<section class="container mx-auto py-12">
+    <h2 class="text-3xl font-bold text-center text-blue-600 mb-8">Your Booked Rides</h2>
+    {% if booked_rides %}
+    <div id="booked-rides" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for ride in booked_rides %}
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Ride Details</h3>
+            <p><strong>Origin:</strong> {{ ride.origin }}</p>
+            <p><strong>Destination:</strong> {{ ride.destination }}</p>
+            <p><strong>Departure:</strong> {{ ride.departure_time }}, {{ ride.departure_date }}</p>
+            <p><strong>Price:</strong> PKR{{ ride.price_per_seat }}/seat</p>
+            <p><strong>Seats Booked:</strong> {{ ride.seats_booked }}</p>
+            <div class="mt-4 text-center">
+                <form method="POST" action="{{ url_for('main.cancel_booking') }}">
+                    <!-- Pass the correct booking_id -->
+                    <input type="hidden" name="ride_id" value="{{ ride.ride_id }}">
+                    <button type="submit" class="btn-primary px-4 py-2 rounded bg-red-600 hover:bg-red-700">Cancel Booking</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-gray-600">You have no booked rides.</p>
+    {% endif %}
+</section>
+
+
+</body>
+</html>
